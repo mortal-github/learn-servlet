@@ -144,11 +144,11 @@ public interface HttpServletResponse extends ServletResponse{
 }
 public class HttpServlet extends GenericServlet{
     public HttpServlet();
-    //桥方法——编译器自动生成  
+    //调用HTTP服务
     public void service(ServletRequest request, ServletResponse response){
-        service((HttpServletRequest)request, (HttpServletResponse)response);
+       service((HttpServletRequest)request, (HttpServletResponse)response);
     }
-    //提供服务
+    //提供HTTP服务
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException{
         String method = request.getMethod();
@@ -170,13 +170,13 @@ public class HttpServlet extends GenericServlet{
     }
     protected long getLastModified(HttpServletRequest request){}
     //Http方法  
-    protected void doGet(HttpServletRequest request, ServletResponse response){}
-    protected void doHead(HttpServletRequest request, ServletResponse response){}
-    protected void doPost(HttpServletRequest request, ServletResponse response){}
-    protected void doPut(HttpServletRequest request, ServletResponse response){}
-    protected void doDelete(HttpServletRequest request, ServletResponse response){}
-    protected void doOptions(HttpServletRequest request, ServletResponse response){}
-    protected void doTrace(HttpServletRequest request, ServletResponse response){}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response){}
+    protected void doHead(HttpServletRequest request, HttpServletResponse response){}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response){}
+    protected void doPut(HttpServletRequest request, HttpServletResponse response){}
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response){}
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response){}
+    protected void doTrace(HttpServletRequest request, HttpServletResponse response){}
 }
 ```
 
