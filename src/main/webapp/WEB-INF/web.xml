@@ -15,6 +15,31 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
-<!--Servlet 请求与响应-->
+  <!--Servlet 请求与响应 全局编码设置-->
+  <request-character-encoding>UTF-8</request-character-encoding>
+  <response-character-encoding>UTF-8</response-character-encoding>
+  <!--设置默认的区域与编码对应-->
+  <locale-encoding-mapping-list>
+    <locale-encoding-mapping>
+      <locale>zh_TW</locale>
+      <encoding>UTF-8</encoding>
+    </locale-encoding-mapping>
+  </locale-encoding-mapping-list>
+  <!--设置后缀与与MIME类型-->
+  <mime-mapping>
+    <extension>pdf</extension>
+    <mime-type>application/pdf</mime-type>
+  </mime-mapping>
+
+  <servlet>
+    <servlet-name>Hello</servlet-name>
+    <servlet-class>package.Hello</servlet-class>
+    <multipart-config>
+      <file-size-threshold>0</file-size-threshold>
+<!--      <location>""</location>-->
+<!--      <max-file-size>-1L</max-file-size>-->
+<!--      <max-request-size>-1L</max-request-size>-->
+    </multipart-config>
+  </servlet>
 
 </web-app>
