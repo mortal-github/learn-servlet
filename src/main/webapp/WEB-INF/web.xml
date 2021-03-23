@@ -7,10 +7,14 @@
         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
         version="4.0"
 >
-<!--<web-app>-->
+<!--Servlet配置-->
   <display-name>LearnServlet</display-name>
+  <default-context-path>ContextPath</default-context-path>
 
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+
+<!--Servlet 请求与响应-->
+
 </web-app>
