@@ -149,8 +149,8 @@ public @interface MultipartPartConfig{
 **Servlet3.1的Part接口**: 
 ```java
 public class Part{
-    public String getHeader(){}         //获取内容标头：Content-Disposition、Content-Type
-    public String getName(){}           //获取name。
+    public String getHeader(String name ){}     //获取内容标头：Content-Disposition、Content-Type
+    public String getName(){}                   //获取name。
     public void write(String filename); //将上传文件文件指定文件名写入磁盘，写入路径是相对于@MultipartConfig的location设置的路径。 
     //Servlet3.1 新增，可以取得上传文件名。但是各浏览器上传的文件名有差异，API没有规定如何处理这些差异。故尽量别用这个方法。 
     public String getSubmittedFileName(){
@@ -194,14 +194,15 @@ public class Part{
 ```
 
 ### `HttpServletResponse`响应对象    
-- 响应确认前设置标头：所有标头设置必须在响应确认之前，响应确认之后的设置的标头会被容器忽略。  
-- 缓冲区：容器可以（但非必要）对响应进行缓冲，通常默认进行缓冲。
-- 响应确认的时机：
+- **响应确认前设置标头**：所有标头设置必须在响应确认之前，响应确认之后的设置的标头会被容器忽略。  
+- **缓冲区**：容器可以（但非必要）对响应进行缓冲，通常默认进行缓冲。
+- **响应确认的时机**：
     - Servlet的`service()`方法关闭。  
     - 响应内容超过`HttpServletResponse`的`setContentLength()`所设置的长度。  
     - 调用了`sendRedirect()`方法。 
     - 调用了`sendError()`方法。
     - 调用了`AsyncContext`的`complete()`方法。
+**API**: 
 ```java
 package javax.servlet.http;
 public interface HttpServletResponse implements ServletResponse, AutoCloseable, Wrapper{
@@ -294,37 +295,31 @@ public class ExampleServlet extends HttpServlet{
 }
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### `RequestDispatcher`调派请求  
 > 在Web应用程序中，经常需要多个Servlet来完成需求。  
 > 可以获取`RequestDsipatcher`示例来调派请求，使得多个Servlet共同完成请求的处理。  
+
 **`RequestDispatcher`调派请求**:
 - **`include()`**请求包含：将另一个`Servlet`的处理流程包含进来，即包含`RequestDispatcher`匹配的Servlet的相同HTTP方法的处理流程。  
 - **`forward()`**请求转发：将请求转发个别的`Servlet`处理，即转发给`RequestDispatcher`匹配的Servlet的相同的HTTP方法来处理剩余内容。 
 - 区别： 
     - 请求转发:由当前Servlet设置响应头(不能设置响应体)，下一个Servlet既可设置响应头也可设置响应体。
     - 请求包含:当前Servlet和下一个Servlet共同完成响应头和响应体。
+    
+**获取`RequestDispacther`实例**：
+- **使用相对URI**：调用方法获取`RequestDispatcher`时要指定**转发或包含的相对URI网址**，然后才能根据URI模式取得对应的`Servlet`。   
+- **允许查询字符串**： 可以在**转发或包含的相对URI网址**中添加查询字符串，那么在被包含或转发的Servlet中就可以像普通调用的Servlet一样使用`getParameter(name)`取得请求参数。  
+
+**API**: 
 ```java
-import javax.servlet.ServletRequest;
 public interface RequestDispatcher{
     void include(ServletRequest request, ServletResponse response);
     void forward(ServletRequest request, ServletResponse response);
 }
+public interface HttpServletRequest extends ServletRequest{
+    RequestDispatcher getRequestDispatcher(String url);
+}
 ```
-**获取`RequestDispacther`实例**：
-- **使用相对URI**：调用方法获取`RequestDispatcher`时要指定**转发或包含的相对URI网址**，然后才能根据URI模式取得对应的`Servlet`。   
-- **允许查询字符串**： 可以在**转发或包含的相对URI网址**中添加查询字符串，那么在被包含或转发的Servlet中就可以像普通调用的Servlet一样使用`getParameter(name)`取得请求参数。  
 
 ```java
 @WebServlet(
@@ -344,16 +339,18 @@ public class Example extends HttpServlet{
 ```
 
 #### 请求包含  
-**`include`**:  
+**`RequestDispatcher`类实例的`include()`方法**:  
 - 包含操作流程：将另一个Servlet的操作流程包括至目前的的Servlet操作流程中。    
 - 参数对象来源：必须分别传入`ServletRequest`和`SerletResponse`接口的对象。  
     - 来源`service()`：可以是`service()`传入的对象。  
     - 来自自定义：
     - 来自封装器：  
+    
 **被包含的Servlet**:  
 - 忽略请求标头设置： 被包含的Servlet中任何对请求标头的设置都会被忽略。  
 - 可以使用`getSession()`：可以使用`getSession()`取得`HttpSession`对象，这是**唯一的例外**。  
 > HttpSession底层默认使用Cookie, 所以响应会加上Cookie请求标头。 
+
 ```java
 @WebServlet("/some")
 public class Some extends HttpServlet{
@@ -368,17 +365,17 @@ public class Some extends HttpServlet{
 ```
 
 #### 请求转发  
-**`forward()`**:  
+**`RequestDispatcher`类实例的``forward()`方法**:  
 - 转发请求处理： 表示将请求处理转发给别的Servlet。  
 - 参数对象来源： 调用时同样传入请求与响应对象。  
+
 **目前的Servlet**：
-- 禁止响应确认： 若要调用`forward()`方法，**目前的Servlet不能有任何响应确认**。 
-    - 忽略处理：若在目前的Servlet中通过响应对象设置了一些响应但未被确认，则所有响应设置会被忽略。 
+- 禁止响应： 若要调用`forward()`方法，**目前的Servlet不能有任何响应确认**。 
+    - 忽略响应：若在目前的Servlet中通过响应对象设置了一些响应但未被确认，则所有响应设置会被忽略。 
     - 抛出异常：如果已经有响应且调用了`forward()`方法，则会抛出`IllegalStateException`。  
     
-    
-#### 请求范围属性  
-- 参数共享限制字符串： 在`include()`或`forward()`时包括请求参数的做法，仅适用于传递字符串给另一个Servlet。  
+### 请求范围属性  
+- **参数共享限制**只能使用字符串： 在`include()`或`forward()`时包括请求参数的做法，仅适用于传递字符串给另一个Servlet。  
 - **请求范围属性**用来共享对象：将**共享对象设置给请求对象成为属性**（称为请求范围共享属性），就可以在Servlet之间共享对象。  
 - 请求范围属性**作用域为请求周期**：请求对象仅在此次请求周期内有效，在请求/响应之后，请求对象就会销毁，故请求范围属性也小时了。  
 ![请求范围属性](请求范围属性.jpg)
@@ -386,19 +383,17 @@ public class Some extends HttpServlet{
 **处理请求范围属性**：  
 ```java
 public class HttpServletRequest extends ServletRequest{
-    setAttribute(String name, Object attribute){}   //指定名字与对象设置属性。
-    getAttribute(String name){}                     //指定名字取得属性。
-    getAttributeNames(){}                           //取得所有属性名称。
+    void setAttribute(String name, Object attribute){}   //指定名字与对象设置属性。
+    Object getAttribute(String name){}                     //指定名字取得属性。
+    Enumeration<String> getAttributeNames(){}                           //取得所有属性名称。
     removeAttribute(){}                             //指定名字移除属性。 
 }
 ```
 **特殊的请求范围属性**： 
 > 属性名称以`java.`或`javax.`开头名称通常保留给规格书中某些特定意义的属性。  
-> 
-> 请求包含或请求转发的request对象和response对象来自最前端的Servlet。 
-> 所以在后续的Servlet中查询请求URI将查询到的时第一个Servlet的请求URI。 
-> 
-> 这些特殊的请求范围属性表示`include()`方法或`forward()`方法传入的请求URI。 
+> 请求包含或请求转发的request对象和response对象来自最前端的Servlet。  
+> 所以在后续的Servlet中查询请求URI将查询到的时第一个Servlet的请求URI。  
+> 这些特殊的请求范围属性表示`include()`方法或`forward()`方法传入的请求URI。  
 > 也就是说可以通过这些属性，获得执行这个Servlet时所匹配的请求URI，而不是一开始的请求URI。  
 - `javax.servlet.include.request_uri`:
 - `javax.servlet.include.context_path`:
