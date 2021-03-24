@@ -42,4 +42,17 @@
     </multipart-config>
   </servlet>
 
+  <session-config>
+    <!--设定浏览器多久没有请求应用程序时，HttpSession就失效-->
+    <session-timeout>30</session-timeout>
+    <!--在ServletContext初始化之前配置SessionCookieConfig-->
+    <cookie-config>
+      <!-- -->
+      <name>youJseSessionId</name>
+      <secure>true</secure>
+<!--      <http-only>true</http-only>-->
+      <max-age>1800</max-age>
+    </cookie-config>
+  </session-config>
+
 </web-app>
