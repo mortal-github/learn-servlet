@@ -55,4 +55,25 @@
     </cookie-config>
   </session-config>
 
+  <!--初始化参数设置-->
+  <servlet>
+    <servlet-name>ServletInitParameter</servlet-name>
+    <servlet-class>pers.mortal.learn.servlet.life.ServletConfigExample</servlet-class>
+    <init-param>
+      <param-name>姓名</param-name>
+      <param-value>钟景文</param-value>
+    </init-param>
+    <init-param>
+      <param-name>方式</param-name>
+      <param-value>XML</param-value>
+    </init-param>
+    <init-param>
+      <param-name>作用</param-name>
+      <param-value>覆盖默认常数，便于更替常数</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletInitParameter</servlet-name>
+    <url-pattern>/life/servlet_init_parameter</url-pattern>
+  </servlet-mapping>
 </web-app>
