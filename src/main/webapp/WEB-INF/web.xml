@@ -76,4 +76,17 @@
     <servlet-name>ServletInitParameter</servlet-name>
     <url-pattern>/life/servlet_init_parameter</url-pattern>
   </servlet-mapping>
+
+  <!--应用程序初始化参数-->
+  <context-param>
+    <param-name>SERVLET_CONTEXT_INIT_PARAMETER</param-name>
+    <param-value>/advance</param-value>
+  </context-param>
+  <!--监听器-->
+  <listener>
+    <listener-class>pers.mortal.learn.servlet.listener.servlet_context.ServletContextAttributeListenerExample</listener-class>
+  </listener>
+  <listener>
+    <listener-class>pers.mortal.learn.servlet.listener.servlet_context.ServletContextListenerExample</listener-class>
+  </listener>
 </web-app>
