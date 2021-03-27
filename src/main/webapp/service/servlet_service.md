@@ -374,6 +374,7 @@ public class Some extends HttpServlet{
     - 忽略响应：若在目前的Servlet中通过响应对象设置了一些响应但未被确认，则所有响应设置会被忽略。 
     - 抛出异常：如果已经有响应且调用了`forward()`方法，则会抛出`IllegalStateException`。  
     
+    
 ### 请求范围属性  
 - **参数共享限制**只能使用字符串： 在`include()`或`forward()`时包括请求参数的做法，仅适用于传递字符串给另一个Servlet。  
 - **请求范围属性**用来共享对象：将**共享对象设置给请求对象成为属性**（称为请求范围共享属性），就可以在Servlet之间共享对象。  
