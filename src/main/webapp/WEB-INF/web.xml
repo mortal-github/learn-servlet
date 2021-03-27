@@ -89,4 +89,29 @@
   <listener>
     <listener-class>pers.mortal.learn.servlet.listener.servlet_context.ServletContextListenerExample</listener-class>
   </listener>
+
+
+  <!--过滤器-->
+  <filter>
+      <filter-name>filterExample</filter-name>
+      <filter-class>pers.mortal.learn.servlet.filter.FilterExample</filter-class>
+      <init-param>
+        <param-name>PARAM1</param-name>
+        <param-value>VALUE1</param-value>
+      </init-param>
+    <init-param>
+      <param-name>PARAM2</param-name>
+      <param-value>VALUE2</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+      <filter-name>filterExample</filter-name>
+      <url-pattern>/*</url-pattern>
+      <servlet-name>ServletInitParameter</servlet-name>
+      <dispatcher>REQUEST</dispatcher>
+      <dispatcher>FORWARD</dispatcher>
+      <dispatcher>INCLUDE</dispatcher>
+      <dispatcher>ERROR</dispatcher>
+      <dispatcher>ASYNC</dispatcher>
+  </filter-mapping>
 </web-app>
