@@ -114,4 +114,34 @@
       <dispatcher>ERROR</dispatcher>
       <dispatcher>ASYNC</dispatcher>
   </filter-mapping>
+
+<!--JSP配置-->
+  <jsp-config>
+
+    <jsp-property-group>
+
+      <!--默认page -->
+      <url-pattern>*.jsp</url-pattern>
+      <page-encoding>UTF-8</page-encoding>
+      <default-content-type>text/html</default-content-type>
+      <buffer>16kb</buffer>
+      <!--默认include，声明指定JSP开头与结尾包括的网页-->
+<!--      <include-prelude>/WEB-INF/jspf/pre.jspf</include-prelude>-->
+<!--      <include-coda>/WEB-INF/jspf/coda.jspf</include-coda>-->
+      <!--忽略换行，指示元素之间的换行也会输出到响应中，可以配置忽略这些换行-->
+<!--      <trim-directive-whiespace>true</trim-directive-whiespace>-->
+      <!--Scriptlet元素，-->
+<!--      <scripting-invalid>true</scripting-invalid>&lt;!&ndash;禁用JSP上的Scriptlet&ndash;&gt;-->
+<!--      <el-ignored>true</el-ignored>-->
+    </jsp-property-group>
+  </jsp-config>
+
+<!--  <error-page>-->
+<!--    <exception-type>java.lang.NullPointerException</exception-type>-->
+<!--    <location>/report.view</location>&lt;!&ndash;该页面必须设置isErrorPage属性为true,才可使用exception隐式对象&ndash;&gt;-->
+<!--  </error-page>-->
+<!--  <error-page>-->
+<!--    <error-code>404</error-code>&lt;!&ndash;基于HTTP错误状态码转发至处理页面&ndash;&gt;-->
+<!--    <location>/404.jsp</location>-->
+<!--  </error-page>-->
 </web-app>
