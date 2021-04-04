@@ -22,7 +22,7 @@ public class CompressionWrapper extends HttpServletResponseWrapper {
         if(this.printWriter != null){
             throw new IllegalStateException();
         }
-        if(this.gzipServletOutputStream != null){
+        if(this.gzipServletOutputStream == null){
             ServletResponse response = this.getResponse();
             this.gzipServletOutputStream = new GzipServletOutputStream(response.getOutputStream());
         }
@@ -34,7 +34,7 @@ public class CompressionWrapper extends HttpServletResponseWrapper {
         if(this.gzipServletOutputStream != null){
             throw new IllegalStateException();
         }
-        if(this.printWriter != null){
+        if(this.printWriter == null){
             ServletResponse response = this.getResponse();
             this.gzipServletOutputStream = new GzipServletOutputStream(response.getOutputStream());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(gzipServletOutputStream, response.getCharacterEncoding());

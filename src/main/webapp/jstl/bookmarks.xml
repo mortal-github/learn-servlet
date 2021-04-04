@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="bookmarks.xsl"?>
+<bookmarks>
+    <bookmark id="1">
+        <title encoding="UTF-8">我的网站</title>
+        <url>http://localhost:8080/contextPath_local-tomcat</url>
+        <category>Servlet</category>
+    </bookmark>
+    <bookmark id="2">
+        <title encoding="UTF-8">jstl</title>
+        <url>http://localhost:8080/contextPath_local-tomcat/jstl</url>
+        <category>JSTL</category>
+    </bookmark>
+</bookmarks>
