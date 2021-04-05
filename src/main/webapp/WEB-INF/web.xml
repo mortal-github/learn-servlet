@@ -144,4 +144,70 @@
 <!--    <error-code>404</error-code>&lt;!&ndash;基于HTTP错误状态码转发至处理页面&ndash;&gt;-->
 <!--    <location>/404.jsp</location>-->
 <!--  </error-page>-->
+
+
+  <!-- 容器安全 -->
+  <!--定义身份验证方式-->
+<!--  <login-config>-->
+<!--    <auth-method>BASIC</auth-method>-->
+<!--&lt;!&ndash;    <auth-method>DIGEST</auth-method>&ndash;&gt;-->
+<!--&lt;!&ndash;    <auth-method>CLIENT-CERT</auth-method>&ndash;&gt;-->
+<!--  </login-config>-->
+
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/security/plogin.html</form-login-page>
+      <form-error-page>/security/error.html</form-error-page>
+    </form-login-config>
+  </login-config>
+
+  <!--授予指定访问角色权限，首先定义角色-->
+  <security-role>
+    <description>Admin User</description>
+    <role-name>admin</role-name>
+  </security-role>
+  <security-role>
+    <description>Manager User</description>
+    <role-name>manager</role-name>
+  </security-role>
+
+  <!--授予指定访问角色权限，然后授予访问权限-->
+  <security-constraint>
+    <!--定义访问控制资源，以URI和HTTP方法标识资源-->
+    <web-resource-collection>
+      <web-resource-name>Admin</web-resource-name>
+      <url-pattern>/admin/*</url-pattern>
+      <!--没有定义HTTP方法，则无论时哪个HTTP方法都只能被admin角色反问-->
+    </web-resource-collection>
+    <!--定义访问控制权限-->
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <!--定义访问控制资源，以URI和HTTP方法标识资源-->
+    <web-resource-collection>
+      <web-resource-name>Manager</web-resource-name>
+      <url-pattern>/manager/*</url-pattern>
+      <!--表明除了GET、POST这两个HTTP方法，其他HTTP方法无论是否具备admin或manager角色都可以访问-->
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+      <!--表明除了GET、POST这两个HTTP方法， 其他方法都收到约束-->
+<!--      <http-method-omission>GET</http-method-omission>-->
+<!--      <http-method-omission>POST</http-method-omission>-->
+    </web-resource-collection>
+    <!--定义访问控制权限-->
+    <auth-constraint>
+      <role-name>admin</role-name>
+      <role-name>manager</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <!-- <auth-constraint/>空元素表示没有任何角色可以访问-->
+  <!-- <role-name>**<role-name>表示任一通过验证的角色-->
+
+  <deny-uncovered-http-methods/>
+  <!--Servlet3.1中， 表示拒绝未列入<security-constraint>的HTTP方法，试图访问将会返回302-->
+
 </web-app>
